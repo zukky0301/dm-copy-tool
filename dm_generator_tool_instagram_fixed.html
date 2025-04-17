@@ -1,0 +1,283 @@
+
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>DMテンプレ生成ツール</title>
+  <style>
+    body {
+      font-family: sans-serif;
+      padding: 20px;
+      background-color: #f7f7f7;
+    }
+    h2 {
+      margin-top: 0;
+    }
+    .mode-selector, .greeting-selector {
+      margin-bottom: 20px;
+    }
+    textarea {
+      width: 100%;
+      height: 400px;
+      margin-top: 10px;
+      font-size: 16px;
+    }
+    button {
+      margin-top: 10px;
+      padding: 10px;
+      font-size: 16px;
+      background-color: #007bff;
+      color: white;
+      border: none;
+      border-radius: 5px;
+    }
+    input[type="text"] {
+      width: 100%;
+      padding: 10px;
+      font-size: 16px;
+    }
+  </style>
+</head>
+<body>
+  <h2>DMテンプレート生成ツール</h2>
+
+  <div class="mode-selector">
+    <label><input type="radio" name="mode" value="x" checked> Xモード</label>
+    <label style="margin-left:20px;"><input type="radio" name="mode" value="instagram"> インスタモード</label>
+  </div>
+
+  <div class="greeting-selector">
+    <label><input type="radio" name="greeting" value="こんばんは！" checked> こんばんは！</label>
+    <label style="margin-left:20px;"><input type="radio" name="greeting" value="こんにちは！"> こんにちは！</label>
+  </div>
+
+  <input type="text" id="nameInput" placeholder="名前を入力してください（例：あい）" oninput="generateMessage()">
+  <textarea id="output" readonly></textarea>
+  <button onclick="copyToClipboard()">コピーする</button>
+
+  <script>
+    const xTemplate = `{{name}}さん、{{greeting}}
+
+個人向けのキャリアコーチングを
+提供している鈴木健太と申します。
+
+もし、{{name}}さんが
+まだキャリアコーチングを
+受けたことがなければ、
+ぜひ一度、私の無料体験
+コーチングをお受け頂けない
+でしょうか。
+
+(初回の方には
+「まずは知って頂きたい！」
+と言う理由で無料でご提供して
+いるので、怪しい理由や強引な
+営業はありません！笑)
+
+私はこれまでに、社会人、
+フリーランス、経営者など
+延べ318名に、955時間以上の
+コーチングを提供してきました。
+
+転職で年収が100万円UPした方、
+副業でYouTubeをゼロから始め、
+25万円を収益化した方など、
+転職や副業を通じて、
+理想のキャリアを築く
+サポートをしています。
+
+【コーチングって何するの？】
+コーチングとは、
+自分の今行っている仕事が
+将来身になるのか考えたり、
+自分が本当にやりがいを感じる
+仕事を見つけたり、
+理想の人生を描いたり、
+といったことを、コーチと一緒に
+行っていく作業の事です。
+
+上記のようなことは、
+漠然と不安に思っていても、
+普段考える機会が無かったり
+どう考えていけば良いのか
+分からなかったりします。
+
+そこで、自分の頭の中だけでは
+なく「誰かに向けてアウトプット
+することで、思考が整理される」
+という原理を利用して
+自分の頭の中を整理すれば
+今後取るべき行動を
+明確にすることが出来ます。
+
+【コーチングを受けるメリット】
+
+・「このままでいいのかな…」と
+　モヤモヤしていた悩みが晴れ、
+　なりたい自分になる為の
+　具体的な行動を明確にできる
+
+・目標が明確になり、
+　より早いスピードで
+　理想を実現することができる
+
+・周囲の目が気にならなくなり、
+　自身の理想に向かって
+　行動する活力が湧いてくる
+
+などなど…
+
+{{name}}さんの今後のご活躍を
+コーチとして応援し、
+理想の状態まで導くお手伝いを
+させて頂ければと思っています。
+
+【体験セッション概要】
+
+費用：無料
+
+時間：90分
+　　　(ZOOM等のオンライン)
+
+日程：ご相談
+　　　（ご都合が合う日程を
+　　　　ご相談ください)
+
+詳細：プロフィール欄のリンク
+　　　からご覧いただけます。
+
+対象：社会人としての
+　　　就業経験がある方
+
+少しでもコーチングにご興味が
+ありましたら、
+
+「興味あり」
+
+と、ご連絡頂けますと幸いです！
+
+また「#6ステップコーチング」
+より、お客様の声をご覧
+いただけます。
+
+はじめましてのご連絡で
+いきなりの長文でごめんなさい。
+
+ここまでお読みいただき
+ありがとうございます！`;
+
+    const instaTemplate = `{{name}}さん、{{greeting}}
+
+個人向けのキャリアコーチングを
+提供している鈴木健太と申します。
+
+もし、{{name}}さんが
+まだキャリアコーチングを
+受けたことがなければ、
+ぜひ一度、私の無料体験
+コーチングをお受け頂けない
+でしょうか。
+
+(初回の方には
+「まずは知って頂きたい！」
+と言う理由で無料でご提供して
+いるので、怪しい理由や強引な
+営業はありません！笑)
+
+私はこれまでに、社会人、
+フリーランス、経営者など
+延べ318名に、955時間以上の
+コーチングを提供してきました。
+
+転職で年収が100万円UPした方、
+副業でYouTubeをゼロから始め、
+25万円を収益化した方など、
+転職や副業を通じて、
+理想のキャリアを築く
+サポートをしています。
+
+【コーチングって何するの？】
+コーチングとは、
+自分の今行っている仕事が
+将来身になるのか考えたり、
+自分が本当にやりがいを感じる
+仕事を見つけたり、
+理想の人生を描いたり、
+といったことを、コーチと一緒に
+行っていく作業の事です。
+
+上記のようなことは、
+漠然と不安に思っていても、
+普段考える機会が無かったり
+どう考えていけば良いのか
+分からなかったりします。
+
+そこで、自分の頭の中だけでは
+なく「誰かに向けてアウトプット
+することで、思考が整理される」
+という原理を利用して
+自分の頭の中を整理すれば
+今後取るべき行動を
+明確にすることが出来ます。
+
+【コーチングを受けるメリット】
+	
+・「このままでいいのかな…」と
+　モヤモヤしていた悩みが晴れ、
+　なりたい自分になる為の
+　具体的な行動を明確にできる
+
+・周囲の目が気にならなくなり、
+　自身の理想に向かって
+　行動する活力が湧いてくる
+
+{{name}}さんの今後の
+ご活躍をコーチとして応援し、
+理想の状態まで導くお手伝いを
+させて頂ければと思っています。
+
+【体験セッション概要】
+
+費用：無料
+
+時間：90分
+　　　(ZOOM等のオンライン)
+
+日程：ご相談
+　　　（ご都合が合う日程を
+　　　　ご相談ください)
+
+対象：社会人としての
+　　　就業経験がある方
+
+少しでもコーチングにご興味が
+ありましたら、
+
+「興味あり」
+
+と、ご連絡頂けますと幸いです。
+
+ここまでお読みいただき
+ありがとうございます！`;
+
+    function generateMessage() {
+      const name = document.getElementById('nameInput').value.trim();
+      const mode = document.querySelector('input[name="mode"]:checked').value;
+      const greeting = document.querySelector('input[name="greeting"]:checked').value;
+      const template = mode === 'x' ? xTemplate : instaTemplate;
+      const message = template
+        .replace(/{{name}}/g, name || '〇〇')
+        .replace(/{{greeting}}/g, greeting);
+      document.getElementById('output').value = message;
+    }
+
+    function copyToClipboard() {
+      const textArea = document.getElementById('output');
+      textArea.select();
+      document.execCommand('copy');
+      alert('コピーしました！');
+    }
+  </script>
+</body>
+</html>
